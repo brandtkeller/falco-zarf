@@ -1,0 +1,22 @@
+kind: ZarfPackageConfig
+metadata:
+  name: falco
+  description: "Falco"
+  url: https://falco.org/docs/
+  version: 0.42.1
+components:
+  - name: falco
+    description: "Deploy Falco"
+    required: true
+    charts:
+      - name: falco
+        url: https://falcosecurity.github.io/charts
+        version: 7.0.2
+        namespace: falco
+        valuesFiles:
+          - values.yaml
+    images:
+      - docker.io/falcosecurity/falco:0.42.1
+      - docker.io/falcosecurity/falcosidekick:2.32.0
+      - docker.io/falcosecurity/falcosidekick-ui:2.2.0
+      - docker.io/redis/redis-stack:7.2.0-v11

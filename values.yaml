@@ -1,0 +1,51 @@
+image:
+  registry: docker.io
+  repository: falcosecurity/falco
+  tag: 0.42.1
+  pullPolicy: IfNotPresent
+
+# https://github.com/falcosecurity/charts/issues/888#issuecomment-3127633920
+falcoctl:
+  artifact:
+    install:
+      enabled: false
+    follow:
+      enabled: false
+driver:
+  kind: modern_ebpf
+falco:
+  config_files:
+    - /dummy
+
+falcosidekick:
+  image:
+    registry: docker.io
+    repository: falcosecurity/falcosidekick
+    tag: 2.32.0
+    pullPolicy: IfNotPresent
+  enabled: true
+  webui:
+    enabled:
+      true
+    customLabels:
+      zarf.dev/connect-name: falco-ui
+    customAnnotations:
+      zarf.dev/connect-description: "Connect to the Falco Sidekick User Interface"
+    initContainer:
+      image:
+        # -- wait-redis initContainer image registry to pull from
+        registry: docker.io
+        # -- wait-redis initContainer image repository to pull from
+        repository: redis/redis-stack
+        # -- wait-redis initContainer image tag to pull
+        tag: "7.2.0-v11"
+    redis:
+      # -- Is mutually exclusive with webui.externalRedis.enabled
+      enabled: true
+      image:
+        # -- The web UI Redis image registry to pull from
+        registry: docker.io
+        # -- The web UI Redis image repository to pull from
+        repository: redis/redis-stack
+        # -- The web UI Redis image tag to pull from
+        tag: "7.2.0-v11"
